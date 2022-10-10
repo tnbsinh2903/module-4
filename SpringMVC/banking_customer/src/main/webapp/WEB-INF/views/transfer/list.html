@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transfers Info</title>
+    <script src="/assets/bootstrap/jquery/jquery-3.6.0.min.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        tr{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="table-title">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1>List of Customers</h1>
+            </div>
+            <div class="col-sm-6">
+                <a href="index.html" class="btn btn-outline-light float-right">
+                    <i class="fas fa-list" aria-hidden="true"></i>
+                    <span>List of Customers</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr class="text-center bg-success">
+            <th>#</th>
+            <th>Sender ID</th>
+            <th>Sender Name</th>
+            <th>Recipient ID</th>
+            <th>Recipient Name</th>
+            <th>Transfer Amount ($)</th>
+            <th>Fees (%)</th>
+            <th>Fees Amount ($))</th>
+        </tr>
+        </thead>
+        <tbody>
+     <th:block th:each="item, state : ${iTransferDTO}">
+         <tr>
+             <td th:text="${state.index + 1}" class="text-center"></td>
+             <td th:text="${item.getSenderId()}" class="text-center"></td>
+             <td th:text="${item.getSenderName()}"></td>
+             <td th:text="${item.getRecipientId()}" class="text-center"></td>
+             <td th:text="${item.getRecipientName()}"></td>
+             <td th:text="${item.getTransferAmount()}" class="text-end num-comma pr-20"></td>
+             <td th:text="${item.getFees()}" class="text-center"></td>
+             <td th:text="${item.getFeesAmount()}" class="text-end num-comma pr-20"></td>
+         </tr>         
+     </th:block>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="5"></td>
+            <td class="text-center font-weight-bold  ">Total Fees Amount:</td>
+            <td colspan="2" class="text-end font-weight-bold" th:text="${sumAmount.amount}" style="font-size: 24px"> </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+</body>
+</html>

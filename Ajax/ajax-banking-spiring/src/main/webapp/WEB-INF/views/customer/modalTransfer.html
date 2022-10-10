@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:fragment="modalTransfer">
+    <div class="modal  fade" id="modalTransfer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog container modal-xl" style="width: 1061px" role="document">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> Transfer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" novalidate="novalidate" id="frmTransfer">
+                        <fieldset class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Sender ID</label>
+                                <input type="text" class="form-control" id="senderIdTrf" name="senderIdTrf" value="">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Sender Name</label>
+                                <input type="text" class="form-control error" name="nameSenderTrf" id="nameSenderTrf"
+                                       aria-invalid="true">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Email</label>
+                                <input type="text" class="form-control" name="emailTrf" id="emailTrf">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Sender balance</label>
+                                <input type="text" class="form-control" name="balanceTrf" id="balanceTrf">
+                            </div>
+                            <div class="col-md-3 mt-3 w-25">
+                                <label class="form-label">Recipient Name</label>
+                                <select style="width: 230px" class="form-select p-2" id="recipientTrf"
+                                        name="recipientTrf">
+                                </select>
+                            </div>
+                            <div class="col-md-3  mt-3">
+                                <label class="form-label">Transfer Amount ($)</label>
+                                <input type="number" class="form-control error" name="transferAmountTrf"
+                                       id="transferAmountTrf" aria-invalid="true">
+                                <!--                <label id="email-error" class="error text-danger" for="email"></label>-->
+                            </div>
+                            <div class="col-md-3  mt-3">
+                                <label class="form-label">Fess (%)</label>
+                                <input type="number" class="form-control error" name="fessTrf" id="fessTrf" value="10"
+                                       aria-invalid="true">
+                                <!--                <label id="email-error" class="error text-danger" for="email"></label>-->
+                            </div>
+                            <div class="col-md-3  mt-3    ">
+                                <label class="form-label">Total Amount Of Transaction ($)</label>
+                                <input type="number" class="form-control error" name="transactionAmountTrf"
+                                       id="transactionAmountTrf" aria-invalid="true">
+                                <!--                <label id="email-error" class="error text-danger" for="email"></label>-->
+                            </div>
+                            <div class="col-md-12">
+
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" id="btnTransferMoney" class="btn btn-outline-info">
+                        <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+                        Transfer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>

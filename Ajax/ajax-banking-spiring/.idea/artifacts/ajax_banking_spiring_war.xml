@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="ajax-banking-spiring:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>ajax-banking-spiring</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="ajax-banking-spiring-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="ajax-banking-spiring:war exploded" />
+    </root>
+  </artifact>
+</component>

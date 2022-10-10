@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script rel="stylesheet" src="assets/bootstrap/js/jquery-3.6.0.min.js"></script>
+
+    <script rel="stylesheet" src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+
+</head>
+
+<body>
+    <h1 id="hihi">aaaaaaa</h1>
+    <p>bbbbbb</p>
+
+    <button>click</button>
+    <a href="#">aa</a>
+    <form action="">
+        <input type="text">
+    </form>
+
+    <div class="div" style="background-color:red; margin:10px;padding:12px; border:2px solid #666; width:60px;"></div>
+
+    <script>
+
+        let customer = ["a"];
+        console.log(customer);
+        let obj = {
+            "id": 1,
+            "name": "sinh"
+        }
+
+        customer.push(obj)
+        console.log(customer)
+
+        $(document).ready(function () {
+            $("div").click(function () {
+                $(this).bind("click", function () {
+                    alert("sinhh")
+                });
+            })
+        })
+        // $(function () {  
+        //     $("button").hover(function () {
+        //         // $("#hihi").hide();
+        //         document.write("aaaa")
+        //     });
+        // });
+
+        // $(document).ready(function () {
+        //     $("p").click(function () {
+        //         // $("#hihi").hide();
+        //         $("h1").hide();
+        //     });
+        // });
+        $(function () {
+
+            $("input").blur(function () {
+                $(this).css("background-color", "red")
+            });
+
+            $("p").on("click", function () {
+                $(this).hide();
+            })
+        })
+
+    </script>
+
+</body>
+
+</html>

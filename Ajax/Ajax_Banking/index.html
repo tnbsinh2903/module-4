@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Customer management</title>
+
+    <link rel="shortcut icon" href="/resources/favicon.ico">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/resources/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/resources/css/sweetalert2.min.css">
+    <link rel="stylesheet" href="/resources/css/style.css"> -->
+    <script src="/assets/bootstrap/jquery/jquery-3.6.0.min.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-5">
+                    <h1>List of customers</h1>
+                </div>
+                <div class="col-sm-7">
+                    <a class="btn btn-outline-light create-modal">
+                        <i class="fas fa-plus-square " aria-hidden="true"></i>
+                        <span>Add New Customer</span>
+                    </a>
+                    <a href="/transfers" class="btn btn-outline-light"><i class="fas fa-history" aria-hidden="true"></i>
+                        <span>Transfer money Information</span></a>
+                </div>
+            </div>
+        </div>
+        <div class="box-body">
+
+
+            <textarea id="tempCustomer" style="display:none">
+        <tr id="tr_{0}">
+            <td class="text-center">{0}</td>
+            <td>{1}</td>
+            <td>{2}</td>
+            <td class="text-center">{3}</td>
+            <td>{4}</td>
+            <td class="text-end num-space">{5}</td>
+            <td class="text-center">
+                <a class="btn btn-outline-secondary edit" title="Edit" data-toggle="tooltip" data-id="{0}">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                </a>
+            </td>
+            <td class="text-center">
+                <a class="btn btn-outline-success deposit" title="Deposit" data-toggle="tooltip" data-id="{0}" >
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                </a>
+            </td>
+            <td class="text-center">
+                <a class="btn btn-outline-warning withdraw" title="Withdraw" data-toggle="tooltip" data-id="{0}" >
+                    <i class="fa fa-minus" aria-hidden="true"></i>
+                </a>
+            </td>
+            <td class="text-center">
+                <a class="btn btn-outline-primary transfer" title="Transfer" data-toggle="tooltip" data-id="{0}" >
+                    <i class="fa fa-exchange" aria-hidden="true"></i>
+                </a>
+            </td>
+            <td class="text-center">
+                <a class="btn btn-outline-danger suspended" title="Suspended" data-toggle="tooltip" data-id="{0}" >
+                    <i class="fa fa-ban" aria-hidden="true"></i>
+                </a>
+            </td>
+        </tr>
+    </textarea>
+
+
+            <input type="hidden" id="currentRow" />
+
+            <table id="tbListCustomers" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>FullName</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Balance</th>
+                        <th colspan="5">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+
+    <div id="modalCreateCustomer" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Customer information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-alert-danger hide"></div>
+                    <form id="frmCreateCustomer" method="post">
+                        <fieldset class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Full name</label>
+                                <input type="text" class="form-control" id="fullName" name="fullName">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input type="text" class="form-control" id="email" name="email">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" class="form-control" id="phone" name="phone">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control" id="address" name="address">
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btnCreateCustomer" class="btn btn-outline-primary">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Create customer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div id="modalUpdateCustomer" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Customer information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-alert-danger hide"></div>
+                    <form id="frmUpdateCustomer" method="post">
+                        <fieldset class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Full name</label>
+                                <input type="text" class="form-control" id="fullNameUp" name="fullNameUp">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input type="text" class="form-control" id="emailUp" name="emailUp">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" class="form-control" id="phoneUp" name="phoneUp">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control" id="addressUp" name="addressUp">
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btnUpdateCustomer" class="btn btn-outline-secondary">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        Update customer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div id="modalDeposit" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Deposit money into customer's account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-alert-danger hide"></div>
+                    <form id="frmDeposit" method="post">
+                        <fieldset class="row g-3">
+                            <div class="mb-3 col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Customer ID</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" id="customerIdDep" name="customerIdDep" class="form-control"
+                                            readonly />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Full Name</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="fullNameDep" name="fullNameDep"
+                                            readonly />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Current balance ($)</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control num-space" id="balanceDep"
+                                            name="balanceDep" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Transaction Amount ($)</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control num-space" id="transactionAmountDep"
+                                            name="transactionAmountDep" />
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btnDepositMoney" class="btn btn-outline-success">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Deposit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div id="modalWithdraw" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Withdraw money from the customer's account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-alert-danger hide"></div>
+                    <form id="frmWithdraw">
+                        <fieldset class="row g-3">
+                            <div class="mb-3 col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Customer ID</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" id="customerIdWd" name="customerIdWd" class="form-control"
+                                            readonly />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Full Name</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="fullNameWd" name="fullNameWd"
+                                            readonly />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Current balance ($)</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control num-space" id="balanceWd"
+                                            name="balanceWd" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label">Transaction Amount ($)</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control num-space" id="transactionAmountWd"
+                                            name="transactionAmountWd" />
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="btnWithdrawMoney" class="btn btn-outline-warning">
+                        <i class="fa fa-minus" aria-hidden="true"></i>
+                        Withdraw
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div id="modalTransfer" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Transfer money Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-alert-danger hide"></div>
+                    <form id="frmTransfer" method="post">
+                        <fieldset class="row mt-3 g-3">
+                            <div class="form-group row">
+                                <div class="mb-3 col-md-4">
+                                    <label class="col-sm-12 col-form-label">Sender ID</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="senderIdTrf" name="senderIdTrf"
+                                            readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-md-4">
+                                    <label class="col-sm-12 col-form-label">Sender Name</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="senderNameTrf" name="senderNameTrf"
+                                            readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-md-4">
+                                    <label class="col-sm-12 col-form-label">Email</label>
+                                    <div class="col-sm-12">
+                                        <input type="email" class="form-control" id="emailTrf" name="emailTrf" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="mb-3 col-md-6">
+                                    <label class="col-sm-12 col-form-label">Sender balance</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control num-space" id="balanceTrf"
+                                            name="balanceTrf" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="col-sm-12 col-form-label">Recipient Name</label>
+                                    <div class="col-sm-12">
+                                        <select class="form-select" id="recipientIdTrf" name="recipientIdTrf">
+                                            <!--                                            <option th:each="item : ${recipientDTOS}" th:value="${item.recipientId}" th:text="'(' + ${item.recipientId} + ') ' + ${item.recipientName}"></option>-->
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="mb-3 col-md-4">
+                                    <label class="col-sm-12 col-form-label">Transfer Amount ($)</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control num-space" id="transferAmountTrf"
+                                            name="transferAmountTrf">
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-md-4">
+                                    <label class="col-sm-12 col-form-label">Fees (%)</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control num-space" id="feesTrf" name="feesTrf"
+                                            value="10" readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-md-4">
+                                    <label class="col-sm-12 col-form-label">Total amount of transaction ($)</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control num-space" id="transactionAmountTrf"
+                                            name="transactionAmountTrf" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="btnTransferMoney" class="btn btn-outline-primary">
+                        <i class="fa fa-exchange" aria-hidden="true"></i>
+                        Transfer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <script type="text/javascript" src="/resources/js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="/resources/js/sweetalert2.min.js"></script>
+    <script type="text/javascript" src="/resources/js/jquery.validate-1.19.3.min.js"></script>
+    <script type="text/javascript" src="/resources/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/resources/js/popper-v1.16.0.min.js"></script>
+    <script type="text/javascript" src="/resources/js/jquery.number.js"></script>
+
+
+    <script type="text/javascript" src="/resources/js/app.js"></script>
+
+    <script type="text/javascript" src="/resources/js/custom-validation.js"></script>
+
+    <script>
+        let page = {
+            urls: {
+                getAllCustomers: App.BASE_URL_CUSTOMER,
+                getCustomerById: App.BASE_URL_CUSTOMER + '/edit/',
+                getDeposit: App.BASE_URL_CUSTOMER + '/deposit/',
+                getWithdraw: App.BASE_URL_CUSTOMER + '/withdraw/',
+                getTransfer: App.BASE_URL_CUSTOMER + '/transfer/',
+                saveNew: App.BASE_URL_CUSTOMER,
+                saveEdit: App.BASE_URL_CUSTOMER + '/edit/',
+                doDeposit: App.BASE_URL_CUSTOMER + '/deposit/',
+                doWithdraw: App.BASE_URL_CUSTOMER + '/withdraw/',
+                doTransfer: App.BASE_URL_CUSTOMER + '/transfer/',
+                doSuspend: App.BASE_URL_CUSTOMER + '/suspend/'
+            }
+        }
+
+        let customer = new Customer();
+        let deposit = new Deposit();
+        let withdraw = new Withdraw();
+        let transfer = new Transfer();
+        let sender = new Sender();
+        let recipient = new Recipient();
+
+        let tempCustomer = jQuery.validator.format($.trim($("#tempCustomer").val()));
+
+        let addRow = () => {
+            $("#tbListCustomers tbody").prepend($(tempCustomer(customer.id, customer.fullName, customer.email, customer.phone, customer.address, customer.balance)));
+        }
+
+        function getCustomers() {
+            return $.ajax({
+                type: "GET",
+                url: page.urls.getAllCustomers,
+            }).done((data) => {
+                $.each(data, (index, item) => {
+                    customer = item;
+                    customer.balance = App.formatNumberSpace(customer.balance);
+                    addRow();
+                });
+            }).fail(function () {
+                App.showErrorAlert("An error occurred. Please try again later !");
+            });
+        }
+
+        function showCreateModal() {
+            $('#modalCreateCustomer').modal('show');
+        }
+
+        function showUpdateModal() {
+            if (customer.id == null) {
+                $('#modalUpdateCustomer').modal('hide');
+                $('#frmUpdateCustomer')[0].reset();
+            } else {
+                $.ajax({
+                    type: "GET",
+                    url: page.urls.getCustomerById + customer.id,
+                }).done((resp) => {
+                    customer = resp;
+
+                    // assignUpdateModal();
+
+                    $("#fullNameUp").val(customer.fullName);
+                    $("#emailUp").val(customer.email);
+                    $("#phoneUp").val(customer.phone);
+                    $('#addressUp').val(customer.address);
+
+                    $('#modalUpdateCustomer').modal('show');
+                }).fail(function () {
+                    App.showErrorAlert("An error occurred. Please try again later !");
+                });
+            }
+        }
+
+        function assignUpdateModal() {
+            $("#upFullName").val(customer.fullName);
+            $("#upEmail").val(customer.email);
+            $("#upPhone").val(customer.phone);
+            $('#upAddress').val(customer.address);
+            $('#modalUpdateCustomer').modal('show');
+        }
+
+        function showDepositModal() {
+            if (deposit.customerId == null) {
+                $('#modalDeposit').modal('hide');
+                $('#frmDeposit')[0].reset();
+            } else {
+                $.ajax({
+                    type: "GET",
+                    url: page.urls.getDeposit + deposit.customerId,
+                }).done((resp) => {
+                    deposit = resp;
+
+                    $("#customerIdDep").val(deposit.customerId);
+                    $("#fullNameDep").val(deposit.fullName);
+                    $("#balanceDep").val(deposit.balance);
+
+                    $('#modalDeposit').modal('show');
+                }).fail(function () {
+                    App.showErrorAlert("An error occurred. Please try again later !");
+                });
+            }
+        }
+
+        function showWithdrawModal() {
+            if (withdraw.customerId == null) {
+                $('#modalWithdraw').modal('hide');
+                $('#frmWithdraw')[0].reset();
+            } else {
+                $.ajax({
+                    type: "GET",
+                    url: page.urls.getWithdraw + withdraw.customerId,
+                }).done((resp) => {
+                    withdraw = resp;
+
+                    // withdraw.balance = App.formatNumberSpace(withdraw.balance);
+                    $("#customerIdWd").val(withdraw.customerId);
+                    $("#fullNameWd").val(withdraw.fullName);
+                    $("#balanceWd").val(withdraw.balance);
+
+                    $('#modalWithdraw').modal('show');
+                }).fail(function () {
+                    App.showErrorAlert("An error occurred. Please try again later !");
+                });
+            }
+        }
+
+        function showTransferModal() {
+            if (transfer.senderId == null) {
+                $('#modalTransfer').modal('hide');
+                $('#frmTransfer')[0].reset();
+            } else {
+                $.ajax({
+                    type: "GET",
+                    url: page.urls.getTransfer + transfer.senderId,
+                }).done((resp) => {
+                    transfer = resp.sender;
+
+                    let recipients = [];
+                    recipients = resp.recipients;
+
+                    let str = ``;
+
+                    $.each(recipients, (index, item) => {
+                        str += `<option value="${item.recipientId}">(${item.recipientId}) ${item.recipientName}</option>`;
+                    });
+
+                    $("#recipientIdTrf").html(str);
+
+                    $("#senderIdTrf").val(transfer.senderId);
+                    $("#senderNameTrf").val(transfer.senderName);
+                    $("#emailTrf").val(transfer.email);
+                    $("#balanceTrf").val(transfer.balance);
+
+                    $('#modalTransfer').modal('show');
+                }).fail(function () {
+                    App.showErrorAlert("An error occurred. Please try again later !");
+                });
+            }
+        }
+
+        function showSuspendedModal() {
+            App.showSuspendedConfirmDialog()
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "POST",
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            url: page.urls.doSuspend + customer.id
+                        }).done(() => {
+                            App.showSuccessAlert("Succeeded client suspension!");
+                            $("#tr_" + customer.id).remove();
+                        }).fail(() => {
+                            App.showErrorAlert("An error occurred. Please try again later!");
+                        });
+                    }
+                });
+        }
+
+        $("#btnCreateCustomer").on("click", function () {
+            customer.fullName = $("#fullName").val();
+            customer.email = $("#email").val();
+            customer.phone = $("#phone").val();
+            customer.address = $("#address").val();
+
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                url: page.urls.saveNew,
+                data: JSON.stringify(customer)
+            }).done((data) => {
+                customer = data;
+                addRow();
+
+                App.showSuccessAlert("Successful data generation !");
+                App.formatTooltip();
+
+                $('#modalCreateCustomer').modal('hide');
+
+            }).fail((jqXHR, textStatus) => {
+
+                $("#modalCreateCustomer .modal-body .modal-alert-danger").empty();
+                $("#modalCreateCustomer .modal-body .modal-alert-danger").removeClass("hide").addClass("show");
+
+                let str = ``;
+                $.each(jqXHR.responseJSON, function (key, value) {
+                    str += `<label id="${key}-error" class="error" for="${key}">${value}</label>`;
+                    $("#" + key).addClass("error");
+                });
+                $("#modalCreateCustomer .modal-body .modal-alert-danger").html(str);
+            });
+        });
+
+        $("#btnUpdateCustomer").on("click", function () {
+            customer.fullName = $("#fullNameUp").val();
+            customer.email = $("#emailUp").val();
+            customer.phone = $("#phoneUp").val();
+            customer.address = $("#addressUp").val();
+
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                url: page.urls.saveEdit,
+                data: JSON.stringify(customer)
+            }).done((resp) => {
+                customer = resp;
+                customer.balance = App.formatNumberSpace(customer.balance);
+                let current_row = $("#tbListCustomers tbody").find('#' + $("#currentRow").val());
+                let updated_row = $(tempCustomer(customer.id, customer.fullName, customer.email, customer.phone, customer.address, customer.balance))
+                current_row.replaceWith(updated_row);
+
+                $("#currentRow").val("");
+                $("#frmUpdateCustomer")[0].reset();
+                $("#frmUpdateCustomer").validate().resetForm();
+
+                App.showSuccessAlert("Data update successful !");
+                App.formatTooltip();
+
+                $('#modalUpdateCustomer').modal('hide');
+
+            }).fail((jqXHR) => {
+                $("#modalUpdateCustomer .modal-body .modal-alert-danger").empty();
+                $("#modalUpdateCustomer .modal-body .modal-alert-danger").removeClass("hide").addClass("show");
+
+                let str = ``;
+                $.each(jqXHR.responseJSON, function (key, value) {
+                    str += `<label id="${key}Up-error" class="error" for="${key}Up">${value}</label>`;
+                    $("#" + key + "Up").addClass("error");
+                });
+                $("#modalUpdateCustomer .modal-body .modal-alert-danger").html(str);
+            });
+        });
+
+        $("#btnDepositMoney").on("click", function () {
+            deposit.customerId = $("#customerIdDep").val();
+            deposit.transactionAmount = $("#transactionAmountDep").val();
+            deposit.balance = App.removeFormatNumberSpace(deposit.balance);
+
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                url: page.urls.doDeposit,
+                data: JSON.stringify(deposit)
+            }).done((resp) => {
+                customer = resp;
+
+                customer.balance = App.formatNumberSpace(customer.balance);
+                let current_row = $("#tbListCustomers tbody").find('#' + $("#currentRow").val());
+                let updated_row = $(tempCustomer(customer.id, customer.fullName, customer.email, customer.phone, customer.address, customer.balance))
+                current_row.replaceWith(updated_row);
+
+                App.showSuccessAlert("Successful deposit transaction !");
+                App.formatTooltip();
+
+                $('#modalDeposit').modal('hide');
+
+            }).fail((jqXHR) => {
+                $("#modalDeposit .modal-body .modal-alert-danger").empty();
+                $("#modalDeposit .modal-body .modal-alert-danger").removeClass("hide").addClass("show");
+
+                let str = ``;
+                $.each(jqXHR.responseJSON, function (key, value) {
+                    str += `<label id="${key}Dep-error" class="error" for="${key}Dep">${value}</label>`;
+                    $("#" + key + "Dep").addClass("error");
+                });
+                $("#modalDeposit .modal-body .modal-alert-danger").html(str);
+            });
+        });
+
+        $("#btnWithdrawMoney").on("click", function () {
+            withdraw.customerId = $("#customerIdWd").val();
+            withdraw.transactionAmount = $("#transactionAmountWd").val();
+            withdraw.balance = App.removeFormatNumberSpace(withdraw.balance);
+
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                url: page.urls.doWithdraw,
+                data: JSON.stringify(withdraw)
+            }).done((resp) => {
+                customer = resp;
+
+                customer.balance = App.formatNumberSpace(customer.balance);
+                let current_row = $("#tbListCustomers tbody").find('#' + $("#currentRow").val());
+                let updated_row = $(tempCustomer(customer.id, customer.fullName, customer.email, customer.phone, customer.address, customer.balance))
+                current_row.replaceWith(updated_row);
+
+                App.showSuccessAlert("Successful withdraw transaction !");
+                App.formatTooltip();
+
+                $('#modalWithdraw').modal('hide');
+
+            }).fail((jqXHR) => {
+                $("#modalWithdraw .modal-body .modal-alert-danger").empty();
+                $("#modalWithdraw .modal-body .modal-alert-danger").removeClass("hide").addClass("show");
+
+                let str = ``;
+                $.each(jqXHR.responseJSON, function (key, value) {
+                    str += `<label id="${key}Wd-error" class="error" for="${key}Wd">${value}</label>`;
+                    $("#" + key + "Wd").addClass("error");
+                });
+                $("#modalWithdraw .modal-body .modal-alert-danger").html(str);
+            });
+        });
+
+        $("#btnTransferMoney").on("click", function () {
+            transfer.transferAmount = App.removeFormatNumberSpace($("#transferAmountTrf").val());
+            transfer.recipientId = $("#recipientIdTrf").val();
+
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                url: page.urls.doTransfer,
+                data: JSON.stringify(transfer)
+            }).done((resp) => {
+                sender = resp.sender;
+                recipient = resp.recipient;
+
+                $("#balanceTrf").val(sender.balance);
+
+                sender.balance = App.formatNumberSpace(sender.balance);
+                let current_row_sender = $("#tbListCustomers tbody").find('#tr_' + sender.id);
+                let updated_row_sender = $(tempCustomer(sender.id, sender.fullName, sender.email, sender.phone, sender.address, sender.balance))
+                current_row_sender.replaceWith(updated_row_sender);
+
+                recipient.balance = App.formatNumberSpace(recipient.balance);
+                let current_row_recipient = $("#tbListCustomers tbody").find('#tr_' + recipient.id);
+                let updated_row_recipient = $(tempCustomer(recipient.id, recipient.fullName, recipient.email, recipient.phone, recipient.address, recipient.balance))
+                current_row_recipient.replaceWith(updated_row_recipient);
+
+                $("#transferAmountTrf").val("");
+
+                App.showSuccessAlert("Successful transfer transaction !");
+                App.formatTooltip();
+
+            }).fail((jqXHR) => {
+
+                $("#modalTransfer .modal-body .modal-alert-danger").empty();
+                $("#modalTransfer .modal-body .modal-alert-danger").removeClass("hide").addClass("show");
+
+                let str = ``;
+                if (jqXHR.responseJSON.message) {
+                    str += `<label id="message-error" class="error" for="message">${jqXHR.responseJSON.message}</label>`;
+                } else {
+                    $.each(jqXHR.responseJSON, function (key, value) {
+                        str += `<label id="${key}Trf-error" class="error" for="${key}Trf">${value}</label>`;
+                        $("#" + key + "Trf").addClass("error");
+                    });
+                }
+
+                $("#modalTransfer .modal-body .modal-alert-danger").html(str);
+            });
+        });
+
+        $("a.create-modal").on("click", function () {
+            delete customer.id;
+            delete customer.balance;
+            showCreateModal();
+        });
+
+        $("#tbListCustomers").on("click", ".edit", function () {
+            customer.id = $(this).data('id');
+            $("#currentRow").val($(this).closest("tr").attr("id"));
+            showUpdateModal();
+        });
+
+        $("#tbListCustomers").on("click", ".deposit", function () {
+            deposit.customerId = $(this).data('id');
+            $("#currentRow").val($(this).closest("tr").attr("id"));
+            showDepositModal();
+        });
+
+        $("#tbListCustomers").on("click", ".withdraw", function () {
+            withdraw.customerId = $(this).data('id');
+            $("#currentRow").val($(this).closest("tr").attr("id"));
+            showWithdrawModal();
+        });
+
+        $("#tbListCustomers").on("click", ".transfer", function () {
+            transfer.senderId = $(this).data('id');
+            $("#currentRow").val($(this).closest("tr").attr("id"));
+            showTransferModal();
+        });
+
+        $("#transferAmountTrf").on("change", function () {
+            let transferAmount = $(this).val();
+            let fees = 10;
+            let feeAmount = transferAmount * fees / 100;
+            let transactionAmount = parseInt(transferAmount) + feeAmount;
+            $("#transactionAmountTrf").val(transactionAmount);
+        });
+
+        $("#tbListCustomers").on("click", ".suspended", function () {
+            customer.id = $(this).data('id');
+            $("#currentRow").val($(this).closest("tr").attr("id"));
+            showSuspendedModal();
+        });
+
+        $('#modalCreateCustomer').on('hidden.bs.modal', function () {
+            $("#currentRow").val("");
+            $("#modalCreateCustomer .modal-body .modal-alert-danger").empty();
+            $("#modalCreateCustomer .modal-body .modal-alert-danger").removeClass("show").addClass("hide");
+            $("#modalCreateCustomer input.error").removeClass("error");
+            $('#frmCreateCustomer')[0].reset();
+            $('#frmCreateCustomer').validate().resetForm();
+        });
+
+        $('#modalUpdateCustomer').on('hidden.bs.modal', function () {
+            $("#currentRow").val("");
+            $("#modalUpdateCustomer .modal-body .modal-alert-danger").empty();
+            $("#modalUpdateCustomer .modal-body .modal-alert-danger").removeClass("show").addClass("hide");
+            $("#modalUpdateCustomer input.error").removeClass("error");
+            $('#frmUpdateCustomer')[0].reset();
+            $('#frmUpdateCustomer').validate().resetForm();
+        });
+
+        $('#modalDeposit').on('hidden.bs.modal', function () {
+            $("#currentRow").val("");
+            $("#modalDeposit .modal-body .modal-alert-danger").empty();
+            $("#modalDeposit .modal-body .modal-alert-danger").removeClass("show").addClass("hide");
+            $("#modalDeposit input.error").removeClass("error");
+            $('#frmDeposit')[0].reset();
+            $('#frmDeposit').validate().resetForm();
+        });
+
+        $('#modalWithdraw').on('hidden.bs.modal', function () {
+            $("#currentRow").val("");
+            $("#modalWithdraw .modal-body .modal-alert-danger").empty();
+            $("#modalWithdraw .modal-body .modal-alert-danger").removeClass("show").addClass("hide");
+            $("#modalWithdraw input.error").removeClass("error");
+            $('#frmWithdraw')[0].reset();
+            $('#frmWithdraw').validate().resetForm();
+        });
+
+        $('#modalTransfer').on('hidden.bs.modal', function () {
+            $("#currentRow").val("");
+            $("#modalTransfer .modal-body .modal-alert-danger").empty();
+            $("#modalTransfer .modal-body .modal-alert-danger").removeClass("show").addClass("hide");
+            $("#modalTransfer input.error").removeClass("error");
+            $('#frmTransfer')[0].reset();
+            $('#frmTransfer').validate().resetForm();
+        });
+
+        $(function () {
+            getCustomers().then(function () {
+                $("#frmDeposit .num-space").number(true, 0, ',', ' ');
+                $("#frmWithdraw .num-space").number(true, 0, ',', ' ');
+                $("#frmTransfer .num-space").number(true, 0, ',', ' ');
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+        });
+    </script>
+
+</body>
+
+</html>

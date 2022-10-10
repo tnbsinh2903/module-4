@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Deposit</title>
+    <script src="/assets/bootstrap/jquery/jquery-3.6.0.min.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+</head>
+<body>
+<div class="container">
+    <div class="table-title">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1>Deposit Money Into Customer Account</h1>
+            </div>
+            <div class="col-sm-4">
+                <a href="/customers" class="btn btn-outline-light float-right">
+                    <i class="fas fa-list" aria-hidden="true"></i>
+                    <span>List of Customers</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div  class="mt-4" >
+        <form th:object="${depositDTO}" method="post" novalidate="novalidate" id="myform">
+            <fieldset class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Customer ID</label>
+                    <input type="text" class="form-control" th:field="*{customerId}">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control error"  th:field="*{fullName}">
+                    <!--                <label id="email-error" class="error text-danger" for="email"></label>-->
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Current balance ($)</label>
+                    <input type="text" class="form-control"  th:field="*{balance}">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Transaction About ($)</label>
+                    <input type="text" class="form-control" th:field="*{transactionAmount}">
+                </div>
+                <div class="col-md-12">
+                    <button type="submit" id="btnCreateCustomer" class="btn btn-outline-primary mt-4">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Deposit
+                    </button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="footer bg-success" style="position: fixed; bottom: 0;height: 60px;width: 100% ">
+    <div id="message-alert ">
+        <div class="text-center pt-3">
+            <h5>Successfully Deposit transaction !</h5>
+            <!--        <label id="email-error" class="error" for="email">Vui lòng nhập đúng định dạng email</label>-->
+        </div>
+    </div>
+</div>
+</body>
+</html>

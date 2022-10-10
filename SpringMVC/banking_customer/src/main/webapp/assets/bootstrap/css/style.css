@@ -1,0 +1,28 @@
+*{
+    box-sizing: border-box;
+}
+
+div.container{
+    max-width: 1350px;
+}
+
+.table-title {
+    background: #299be4;
+    color: #fff;
+    padding: 16px 30px;
+    border-radius: 3px 3px 0 0;
+}
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.table{
+    caption-side: bottom;
+    border-collapse: collapse;
+    /*background-color:greenyellow;*/
+}
+.table>tbody>tr>td{
+    vertical-align: middle;
+}

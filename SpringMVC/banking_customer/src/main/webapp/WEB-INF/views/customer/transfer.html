@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transfers</title>
+    <script src="/assets/bootstrap/jquery/jquery-3.6.0.min.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+</head>
+<body>
+<div class="container">
+    <div class="table-title">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1>Transfer Money Information</h1>
+            </div>
+            <div class="col-sm-4">
+                <a href="/customers" class="btn btn-outline-light float-right">
+                    <i class="fas fa-list" aria-hidden="true"></i>
+                    <span>List of Customers</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4">
+        <form th:object="${transfer}" method="post" novalidate="novalidate" id="myform">
+            <fieldset class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Sender ID</label>
+                    <input type="text" class="form-control" th:field="*{senderId}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Sender Name</label>
+                    <input type="text" class="form-control error" th:field="*{senderName}">
+                    <!--                <label id="email-error" class="error text-danger" for="email"></label>-->
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Email</label>
+                    <input type="text" class="form-control" th:field="*{email}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Sender balance</label>
+                    <input type="text" class="form-control" th:field="*{balance}">
+                </div>
+                <div class="col-md-3 mt-3">
+                    <label class="form-label">Recipient Name</label>
+                    <select style="width: 300px" class="p-2" th:field="*{recipientId}">
+                        <option th:each="item : ${recipientDTO}" th:value="${item.recipientId}"
+                                th:text=" '(' + ${item.recipientId} + ')' + ${item.recipientName}"></option>
+                    </select>
+                </div>
+                <div class="col-md-3  mt-3">
+                    <label class="form-label">Transfer Amount ($)</label>
+                    <input type="text" class="form-control error" th:field="*{transferAmount}">
+                </div>
+                <div class="col-md-3  mt-3">
+                    <label class="form-label">Fess (%)</label>
+                    <input type="text" class="form-control error" value="10" readonly>
+                    <!--                <label id="email-error" class="error text-danger" for="email"></label>-->
+                </div>
+                <div class="col-md-3  mt-3    ">
+                    <label class="form-label">Total Amount Of Transaction ($)</label>
+                    <input type="text" class="form-control error" th:field="*{transactionAmount}" readonly>
+                    <!--                <label id="email-error" class="error text-danger" for="email"></label>-->
+                </div>
+                <div class="col-md-12">
+                    <button type="submit" id="btnCreateCustomer" class="btn btn-outline-info mt-4">
+                        <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+                        Transfer
+                    </button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

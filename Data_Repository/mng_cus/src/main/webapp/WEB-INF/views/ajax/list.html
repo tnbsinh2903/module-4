@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+    <tr>
+        <td>Id</td>
+        <td>Name</td>
+        <td>Detail</td>
+    </tr>
+    <tr th:each="customer : ${customers}">
+        <td th:text="${customer.id}"></td>
+        <td th:text="${customer.firstName}"></td>
+        <td>
+            <button th:onclick="|detail(${customer.id})|">Detail</button>
+        </td>
+
+
+    </tr>
+</table>
+<p>aaaaaaaaaaa</p>
+<button>aaaa</button>
+
+<script src="/assets/node_modules/jquery/dist/jquery.min.js"></script>
+
+<script>
+    function detail(customerId) {
+
+        $.getJSON("/findById/" + customerId, function (result) {
+            alert("Customer Id: " + result.id + firstName );
+        })
+    }
+</script>
+</body>
+</html>

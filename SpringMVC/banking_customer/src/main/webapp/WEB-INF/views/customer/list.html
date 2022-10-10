@@ -1,0 +1,189 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="/assets/bootstrap/jquery/jquery-3.6.0.min.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+</head>
+<body>
+<div class="container ">
+    <div class="table-title">
+        <div class="row">
+            <div class="col-sm-5">
+                <h1>List of Customers</h1>
+            </div>
+            <div class="col-sm-7">
+                <div class="float-right">
+                <a href="/transferList" class="btn btn-outline-light">
+                    <i class="fas fa-history" aria-hidden="true">
+                    </i>
+                    <span>Transfer Money Information</span>
+                </a>
+
+                <a href="/create" class="btn btn-outline-light"   >
+                    <i class="fas fa-plus-square" aria-hidden="true">
+                    </i>
+                    <span>Add New Customers</span>
+                </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr class="text-center bg-success">
+            <th>#</th>
+            <th>FullName</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Balance</th>
+            <th colspan="5">Action</th>
+        </tr>
+        </thead>
+        <tbody class="bg-white">
+             <th:block th:each="custoemr : ${customers}">
+                 <tr class="text-center">
+                     <td th:text="${custoemr.getId()}" ></td>
+                     <td th:text="${custoemr.getFullName()}"></td>
+                     <td th:text="${custoemr.getEmail()}"></td>
+                     <td th:text="${custoemr.getPhone()}"></td>
+                     <td th:text="${custoemr.getAddress()}"></td>
+                     <td th:text="${custoemr.getBalance()}"></td>
+                     <td class="text-center">
+                         <a class="btn btn-outline-secondary" title="Edit" data-toggle="tooltip" th:href="@{/edit/__${custoemr.getId()}__}" data-bs-original-title="Edit">
+                             <i class="fas fa-edit" aria-hidden="true"></i>
+                         </a>
+                     </td>
+                     <td class="text-center">
+                         <a class="btn btn-outline-success" title="Deposit" data-toggle="tooltip" th:href="@{/deposit/__${custoemr.getId()}__}" data-bs-original-title="Deposit">
+                             <i class="fas fa-plus" aria-hidden="true"></i>
+                         </a>
+                     </td>
+                     <td class="text-center">
+                         <a class="btn btn-outline-warning" title="Withdraw" data-toggle="tooltip" th:href="@{/withdraw/__${custoemr.getId()}__}" data-bs-original-title="Withdraw">
+                             <i class="fas fa-minus" aria-hidden="true"></i>
+                         </a>
+                     </td>
+                     <td class="text-center">
+                         <a class="btn btn-outline-primary" title="Transfer" data-toggle="tooltip" th:href="@{/transfer/__${custoemr.getId()}__}" data-bs-original-title="Transfer">
+                             <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+                         </a>
+                     </td>
+                     <td class="text-center">
+                         <a class="btn btn-outline-danger" title="Suspended" data-toggle="tooltip" th:href="@{/delete/__${custoemr.getId()}__}"   data-bs-original-title="Suspended">
+                             <!--                    onclick="myfunction()"-->
+                             <i class="fas fa-user-slash" aria-hidden="true"></i>
+                         </a>
+                     </td>
+                 </tr>
+             </th:block>
+        </tbody>
+    </table>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create Customer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmCreateCustomer" method="post" novalidate="novalidate">
+                    <fieldset class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Full name</label>
+                            <input type="text" class="form-control" id="fullName" name="fullName" value="">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input type="text" class="form-control" id="email" name="email" value="">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" value="">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" name="address" value="">
+                        </div>
+                        <div class="col-md-12">
+                            <button type="submit" id="btnCreateCustomer" class="btn btn-outline-primary">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                Create customer
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+         <!--  toast-->
+<!--<div class="toast" data-autohide="false" id="myToast">-->
+<!--    <div class="toast-header">-->
+<!--        <strong class="mr-auto text-primary"> Sinhhhh!</strong>-->
+<!--        <small class="text-muted">10 mins ago</small>-->
+<!--        <button type="button" class="fas fa-window-close" data-dismiss="toast"></button>-->
+<!--    </div>-->
+<!--    <div class="toast-body">-->
+<!--        Hello EveryOne !!!!-->
+<!--    </div>-->
+<!--    <script>-->
+<!--        $(document).ready(function(){-->
+<!--                $("#myToast").toast("show");-->
+<!--        });-->
+<!--        -->
+<!--    </script>-->
+<!--</div>-->
+
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    function myfunction() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                )
+            }
+        })
+    }
+</script>
+
+<!--$("#customerID").number(true, 0, ',', ',');-->
+<!--$("#customerID").number(5020.2364, 1, ',', ' ' );-->
+<!--$("#customerID").number(true, 1 , ',', ' ' );-->
+</body>
+</html>

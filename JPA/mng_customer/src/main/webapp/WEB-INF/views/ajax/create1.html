@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create</title>
+    <script src="/assets/node_modules/jquery/dist/jquery.min.js"></script>
+
+</head>
+<body>
+
+<form  th:object="${customer}"  id="formAdd" method="post">
+    <table>
+        <tr>
+            <td>First Name:</td>
+            <td><input type="text" th:field="*{firstName}"/></td>
+        </tr>
+        <tr>
+            <td>Last Name:</td>
+            <td><input type="text" th:field="*{lastName}"/></td>
+        </tr>
+     <input type="submit" value="addd"> </input>
+    </table>
+</form>
+
+<script>
+
+        $("#formAdd").submit(function (event){
+            var firstName = $("#firstName").val();
+            var lastName = $("#lastName").val();
+            var customer = {firstName : firstName, lastName:lastName};
+
+            $.ajax({
+                url: "create1",
+                data: JSON.stringify(customer),
+                type: "POST",
+                headers: {
+                    'Accept':"application/json",
+                    "Content-Type" : "application/json"
+                },
+                success: function (result){
+                    alert("create success id = " + result.id + " " +   result.lastName + " " + result.firstName );
+                }
+            });
+            event.preventDefault();
+        })
+
+
+</script>
+</body>
+</html>

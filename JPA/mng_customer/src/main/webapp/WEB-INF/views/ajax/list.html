@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/assets/node_modules/jquery/dist/jquery.min.js"></script>
+
+</head>
+<body>
+<table>
+    <tr>
+        <td>Id</td>
+        <td>First Name</td>
+        <td>Last Name</td>
+        <td>Detail</td>
+    </tr>
+    <tr th:each="customer : ${customers}">
+        <td th:text="${customer.id}"></td>
+        <td th:text="${customer.lastName}"></td>
+        <td th:text="${customer.firstName}"></td>
+        <td>
+            <button type="submit" th:onclick="|detail(${customer.id})|">Detail</button>
+        </td>
+
+
+    </tr>
+</table>
+
+<script>
+    function detail(customerId) {
+        $.post("/findById/" , {id:customerId}, function (result) {
+             alert("customer :" + result.id + result.lastName + result.firstName )
+        },'json')
+    }
+    function detailS(customerId) {
+        $.getJSON("/findById/" + customerId, function (result) {
+            alert("customer :" + result.id + result.lastName + result.firstName)
+        })
+    }
+
+    function detailss(customerId) {
+
+        $.get("/findById/" + customerId , function (result) {
+            alert("customer :" + result.id + result.lastName + result.firstName )
+        },'json')
+    }
+</script>
+</body>
+</html>
